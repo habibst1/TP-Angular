@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
 import { Cv } from "../model/cv";
 import { CvService } from "../services/cv.service";
 
@@ -8,9 +8,14 @@ import { CvService } from "../services/cv.service";
   styleUrls: ["./item.component.css"],
 })
 export class ItemComponent {
+  private cvService = inject(CvService);
+
   @Input({ required: true }) cv!: Cv;
   @Input() size = 50;
-  constructor(private cvService: CvService) {}
+
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+  constructor() {}
 
   onSelectCv() {
     this.cvService.selectCv(this.cv);

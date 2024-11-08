@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { CredentialsDto } from '../dto/credentials.dto';
 import { ROUTES, Router } from '@angular/router';
@@ -11,11 +11,14 @@ import { APP_ROUTES } from '../../../config/routes.config';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private toastr: ToastrService
-  ) {}
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
+
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {}
   login(credentials: CredentialsDto) {
     this.authService.login(credentials).subscribe({
       next: (response) => {

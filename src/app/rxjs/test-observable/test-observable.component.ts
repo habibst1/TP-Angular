@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, inject } from "@angular/core";
 import { Observable, Subscription, filter, map } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 
@@ -8,9 +8,14 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ["./test-observable.component.css"],
 })
 export class TestObservableComponent {
+  private toaster = inject(ToastrService);
+
   firstObservable$: Observable<number>;
 
-  constructor(private toaster: ToastrService) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
     this.firstObservable$ = new Observable((observer) => {
       let i = 5;
       setInterval(() => {

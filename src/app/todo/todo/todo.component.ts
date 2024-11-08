@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Todo } from '../model/todo';
 import { TodoService } from '../service/todo.service';
 
@@ -9,9 +9,14 @@ import { TodoService } from '../service/todo.service';
   providers: [TodoService],
 })
 export class TodoComponent {
+  private todoService = inject(TodoService);
+
   todos: Todo[] = [];
   todo = new Todo();
-  constructor(private todoService: TodoService) {
+
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+  constructor() {
     this.todos = this.todoService.getTodos();
   }
   addTodo() {

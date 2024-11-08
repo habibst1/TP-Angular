@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../auth/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -10,11 +10,14 @@ import { APP_ROUTES } from '../../../config/routes.config';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
-  constructor(
-    public authService: AuthService,
-    private router: Router,
-    private toastr: ToastrService
-  ) {}
+  authService = inject(AuthService);
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
+
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {}
 
   logout() {
     this.authService.logout();
