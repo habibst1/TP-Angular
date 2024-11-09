@@ -19,7 +19,7 @@ export class DetailsCvComponent implements OnInit {
   private toastr = inject(ToastrService);
   authService = inject(AuthService);
 
-  cv: Observable<Cv> | null = null;
+  cv$: Observable<Cv> | null = null;
 
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[]);
@@ -28,7 +28,7 @@ export class DetailsCvComponent implements OnInit {
   ngOnInit() {
     const id = this.activatedRoute.snapshot.params['id'];
 
-    this.cv = this.cvService.getCvById(+id).pipe(
+    this.cv$ = this.cvService.getCvById(+id).pipe(
       catchError(
         (e) => {
           this.router.navigate([APP_ROUTES.cv]);
