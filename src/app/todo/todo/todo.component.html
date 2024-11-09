@@ -1,18 +1,42 @@
 <div class="row">
   <div class="col">
+    <label for="statusFilter">Filter by Status:</label>
+    <select
+      id="statusFilter"
+      [ngModel]="selectedStatusValue"         
+      (ngModelChange)="selectedStatusValue = $event"
+      (change)="onStatusChange()"
+      class="form-select mb-3"
+    >
+      <option [value]="''">All</option>
+      <option [value]="'waiting'">Waiting</option>
+      <option [value]="'in progress'">In Progress</option>
+      <option [value]="'done'">Done</option>
+    </select>
     <ol class="list-group">
-      @for (todo of todos; track todo) {
-        <li class="list-group-item">
+      @for (todo of filteredTodos(); track todo) {
+        <li class="list-group-item" 
+        [ngClass]="{
+          'td-waiting': todo.status === 'waiting',
+          'td-in-progress': todo.status === 'in progress',
+          'td-done': todo.status === 'done'
+        }"
+        >
           {{todo.name}} : {{todo.content}}
-          <i (click)="deleteTodo(todo)" class="fa fa-trash" aria-hidden="true"></i>
+          <select [(ngModel)]="todo.status" (change)="updateTodoStatus(todo)" class="form-select d-inline w-auto ms-2">
+            <option [ngValue]="'waiting'">waiting</option>
+            <option [ngValue]="'in progress'">in progress</option>
+            <option [ngValue]="'done'">done</option>
+          </select>
+          <i (click)="deleteTodo(todo)" class="fa fa-trash p-2" aria-hidden="true"></i>
         </li>
       }
     </ol>
   </div>
   <div class="col">
-    name: <input [(ngModel)]="todo.name" type="text" class="form-control">
-    content: <input [(ngModel)]="todo.content" type="text" class="form-control">
-    <button (click)="addTodo()" [disabled]="!todo.name.trim() || !todo.content.trim()"
+    name: <input [(ngModel)]="todo().name" type="text" class="form-control">
+    content: <input [(ngModel)]="todo().content" type="text" class="form-control">
+    <button (click)="addTodo()" [disabled]="!todo().name.trim() || !todo().content.trim()"
     class="btn btn-primary m-2">add</button>
   </div>
 </div>

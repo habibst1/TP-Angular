@@ -12,10 +12,6 @@ export class TodoService {
 
   private todos: Todo[] = [];
 
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-  constructor() {}
-
   /**
    * elle retourne la liste des todos
    *
@@ -55,5 +51,18 @@ export class TodoService {
    */
   logTodos() {
     this.loggerService.logger(this.todos);
+  }
+
+  /**
+   * Update le status d'un todo
+   *
+   * @param todo: Todo
+   * @returns void
+   */
+  updateTodoStatus(todo: Todo): void {
+    const index = this.todos.findIndex(t => t.id === todo.id);
+    if (index > -1) {
+      this.todos[index].status = todo.status;
+    }
   }
 }
