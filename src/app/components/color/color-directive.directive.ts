@@ -10,8 +10,9 @@ export class ColorDirective {
   @HostBinding('style.color') textColor!: string;
   @HostBinding('style.border-color') borderColor!: string;
 
+  constructor(){}
 
-  @HostListener('keydown') newColor() {
+  @HostListener('keyup') newColor() {
     this.changeColor();
   }
 

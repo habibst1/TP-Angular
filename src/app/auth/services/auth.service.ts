@@ -55,5 +55,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userid');
+    this.userId.set(0);
+    console.log('test etst : '+this.isAuthenticatedSignal())
   }
 }

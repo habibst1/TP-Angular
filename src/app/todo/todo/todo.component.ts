@@ -46,6 +46,7 @@ export class TodoComponent {
   updateTodoStatus(todo: Todo) {
     this.todoService.updateTodoStatus(todo);
     this.todos.set(this.todoService.getTodos());  
+    this.onStatusChange();
   }
   
   filterTodos(status: string) {
