@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostBinding, HostListener } from '@angular/core';
 
 @Directive({
-  selector: '[apparcenciel]',
+  selector: 'input[apparcenciel]',
   standalone: true,
 })
 export class ColorDirective {
