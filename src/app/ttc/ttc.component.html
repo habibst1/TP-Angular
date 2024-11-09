@@ -1,0 +1,26 @@
+<div class="container lg p-4 mt-5 bg-[#e5e5e5]">
+    <div class="flex mb-5">
+        <div class="flex-none mr-7">TC-Calculator </div>
+      
+    </div>
+    
+    <div class="columns-3 ">
+        <div>
+            <div class="row flex items-center justify-center bg-yellow-100 h-5  rounded-lg mb-2 ">prix HT </div>
+            <div class="row rounded-lg bg-white"><input class="w-full border rounded-lg hover:border-red-300" type="text" [(ngModel)]="prix"></div>
+        </div>
+        <div>
+            <div class="row flex items-center justify-center h-5  bg-yellow-100 py-2 rounded-lg mb-2 ">Quantité</div>
+            <div class="row rounded-lg bg-white"><input class="w-full pl-4 border rounded-lg hover:border-red-300" type="text" [(ngModel)]="quantite"></div>
+        </div>
+        <div>
+            <div class="row flex items-center justify-center h-5 bg-yellow-100 py-2 rounded-lg mb-2 ">TVA</div>
+            <div class="row rounded-lg bg-white"><input class="w-full border rounded-lg hover:border-red-300" type="text" [(ngModel)]="tva"></div>
+        </div>
+    </div>
+    <div class="columns-3 flex-grow mt-5">
+    <div class=" text-center bg-blue-100 ">Prix unitaire TTC : {{prixTTC()}}</div>
+    <div class=" text-center bg-green-100">Prix total TTC : {{prixTotTTC()}}</div>
+    <div class="text-center bg-red-100 ">Discount on total : {{discountOnTot()}}</div></div>
+    
+</div>
