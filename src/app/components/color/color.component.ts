@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, inject } from "@angular/core";
+import { Component, Input, OnInit, inject, Directive } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
+import { debounceTime } from 'rxjs';
 
 @Component({
     selector: "app-color",

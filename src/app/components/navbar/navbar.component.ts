@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../auth/services/auth.service';
 import { Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { APP_ROUTES } from '../../../config/routes.config';
-
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-navbar',
@@ -11,20 +11,18 @@ import { APP_ROUTES } from '../../../config/routes.config';
     styleUrls: ['./navbar.component.css'],
     standalone: true,
     imports: [
-    RouterLinkActive,
-    RouterLink
-],
+        RouterLinkActive,
+        RouterLink,
+        NgIf,
+    ],
 })
 export class NavbarComponent {
-  authService = inject(AuthService);
-  private router = inject(Router);
-  private toastr = inject(ToastrService);
-
-  /** Inserted by Angular inject() migration for backwards compatibility */
-  constructor(...args: unknown[]);
-
-  constructor() {}
-
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
+  isAuthenticated = this.authService.isAuthenticatedSignal();
   logout() {
     this.authService.logout();
     this.router.navigate([APP_ROUTES.login]);
