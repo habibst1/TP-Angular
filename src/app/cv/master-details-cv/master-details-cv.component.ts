@@ -29,7 +29,6 @@ export class MasterDetailsCvComponent {
           return of(this.cvService.getFakeCvs());
         })
     );
-    console.log("test github");
     
   }
 
