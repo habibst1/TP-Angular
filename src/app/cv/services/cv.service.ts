@@ -50,7 +50,7 @@ export class CvService {
    *
    */
    getCvs(): Observable<Cv[]> {
-    return this.http.get<Cv[]>(API.cv).pipe(shareReplay(1)); // Cache API response
+    return this.http.get<Cv[]>(API.cv).pipe(shareReplay(1));
   }
   /**
    *

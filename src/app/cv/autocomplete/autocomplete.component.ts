@@ -33,6 +33,7 @@ export class AutocompleteComponent {
       distinctUntilChanged(),
       switchMap((value) => {
         if (value) {
+          console.log(value);
           return this.cvService.searchCvs(value);
         } else {
           return of([]);
