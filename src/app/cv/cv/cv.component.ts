@@ -3,7 +3,8 @@ import { Cv } from "../model/cv";
 import { LoggerService } from "../../services/logger.service";
 import { ToastrService } from "ngx-toastr";
 import { CvService } from "../services/cv.service";
-import { catchError, Observable, of } from "rxjs";
+import { catchError, map, Observable, of } from "rxjs";
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: "app-cv",
   templateUrl: "./cv.component.html",
@@ -13,10 +14,11 @@ export class CvComponent {
   private logger = inject(LoggerService);
   private toastr = inject(ToastrService);
   private cvService = inject(CvService);
+  private route = inject(ActivatedRoute)
 
-  cvs: Observable<Cv[]>;
-  juniors: Observable<Cv[]>;
-  seniors: Observable<Cv[]>;
+  cvs$: Observable<Cv[]>;
+  juniors$: Observable<Cv[]>;
+  seniors$: Observable<Cv[]>;
   selectedCv: Observable<Cv> | null = null;
   /*   selectedCv: Cv | null = null; */
   date = new Date();
@@ -26,31 +28,16 @@ export class CvComponent {
   constructor(...args: unknown[]);
 
   constructor() {
-    // Ajouter catchErrror dans la pipe 
-    this.cvs =  this.cvService.getCvs().pipe(
-      catchError( (e) => {
-        console.log('we are in error');
-        this.toastr.error(`
-          Attention!! Les données sont fictives, problème avec le serveur.
-          Veuillez contacter l'admin.`);
-          return of(this.cvService.getFakeCvs());
-        })
+    const resolvedCvs = this.route.snapshot.data['cvs'] as Cv[];
+
+    this.cvs$ = of(resolvedCvs);
+
+    this.juniors$ = this.cvs$.pipe(
+      map(cvs => cvs.filter(cv => cv.age < 40))
     );
-     this.juniors = this.cvService.getJuniors().pipe(
-      catchError((e) => {
-        console.log('Error fetching juniors');
-        this.toastr.error("Impossible de récupérer les CVs des juniors.");
-        return of([]);  // Return an empty array on error
-      })
-    );
-  
-    this.seniors = this.cvService.getSeniors().pipe(
-      catchError((e) => {
-        console.log('Error fetching seniors');
-        this.toastr.error("Impossible de récupérer les CVs des seniors.");
-        return of([]);  // Return an empty array on error
-      })
-    );
+    this.seniors$ = this.cvs$.pipe(
+      map(cvs => cvs.filter(cv => cv.age >= 40))
+    ); 
 
     this.logger.logger("je suis le cvComponent");
     this.toastr.info("Bienvenu dans notre CvTech");
@@ -63,7 +50,9 @@ export class CvComponent {
   }
 
   getCurrentCvs(): Observable<Cv[]> {
-    return this.selectedCategory === 'juniors' ? this.juniors : this.seniors;
+    return this.selectedCategory === 'juniors' ? this.juniors$ : this.seniors$;
   }
+
+
 }
   

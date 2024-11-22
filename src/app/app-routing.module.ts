@@ -14,6 +14,7 @@ import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { ProductsComponent } from "./products/products.component";
 import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-cv.component";
+import { CvResolver } from "./cv/services/CvResolver";
 
 const routes: Route[] = [
   { path: "cv/list",
@@ -27,6 +28,9 @@ const routes: Route[] = [
   { path: "products", component: ProductsComponent },
   {
     path: "cv",
+    resolve: {
+      cvs: CvResolver
+    },
     component: CvComponent,
   },
   { path: "cv/add", component: AddCvComponent, canActivate: [AuthGuard] },
