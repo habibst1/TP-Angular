@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { Cv } from "../model/cv";
-import { Observable, Subject } from "rxjs";
+import { map, Observable, shareReplay, Subject } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { API } from "../../../config/api.config";
 
@@ -40,17 +40,51 @@ export class CvService {
     return this.cvs;
   }
 
-  /**
+   /**
    *
-   * Retourne la liste des cvs de l'API
+   * Retourne la liste des cvs de l'API multicast
    *
    * @returns CV[]
    *
    */
-  getCvs(): Observable<Cv[]> {
-    return this.http.get<Cv[]>(API.cv);
+   getCvs(): Observable<Cv[]> {
+    return this.http.get<Cv[]>(API.cv).pipe(shareReplay(1)); // Cache API response
   }
-
+  /**
+   *
+   * Retourne la liste des cvs de juniors
+   *
+   * @returns CV[]
+   *
+   */
+  getJuniors(): Observable<Cv[]> {
+    return this.getCvs().pipe(map((cvs) => cvs.filter((cv) => cv.age < 40)));
+  }
+  /**
+   *
+   * Retourne la liste des cvs de seniors
+   *
+   * @returns CV[]
+   *
+   */
+  getSeniors(): Observable<Cv[]> {
+    return this.getCvs().pipe(map((cvs) => cvs.filter((cv) => cv.age >= 40)));
+  }
+  /**
+   *
+   * Retourne la liste des cvs contenant entered 'name'
+   *
+   * @returns CV[]
+   *
+   */
+  searchCvs(name: string): Observable<any[]> {
+    const filter = {
+      where: {
+        name: { like: `%${name}%` }, // SQL-like query to search for names containing the given text
+      },
+    };
+    return this.http.get<any[]>(API.cv, { params: { filter: JSON.stringify(filter) } });
+  }
   /**
    *
    * supprime un cv par son id de l'API

@@ -1,9 +1,30 @@
+<app-autocomplete></app-autocomplete>
 <div class="row">
   <div class="col">
     <div class="alert alert-warning">
       {{ date | date : "full" | uppercase }}
     </div>
-    <app-list [cvs]="cvs | async"></app-list>
+    
+    <!-- Buttons to switch between Juniors and Seniors -->
+    <div class="btn-group" role="group" aria-label="Toggle Categories">
+      <button 
+        type="button" 
+        class="btn btn-primary" 
+        [class.active]="selectedCategory === 'juniors'" 
+        (click)="selectCategory('juniors')">
+        Juniors
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary" 
+        [class.active]="selectedCategory === 'seniors'" 
+        (click)="selectCategory('seniors')">
+        Seniors
+      </button>
+    </div>
+    
+    <!-- Display the list of CVs based on selected category -->
+    <app-list [cvs]="getCurrentCvs() | async"></app-list>
   </div>
   <div class="col">
     <app-cv-card [cv]="selectedCv | async"></app-cv-card>
