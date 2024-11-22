@@ -3,12 +3,14 @@ import { Cv } from "../model/cv";
 import { map, Observable, shareReplay, Subject } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { API } from "../../../config/api.config";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
 })
 export class CvService {
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   private cvs: Cv[] = [];
   /**
@@ -169,5 +171,9 @@ export class CvService {
    */
   selectCv(cv: Cv) {
     this.#selectCvSuject$.next(cv);
+
+    if (this.router.url.startsWith('/cv/list')) {
+      this.router.navigate(['/cv/list', cv.id]);
+    }
   }
 }

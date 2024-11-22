@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { APP_ROUTES } from '../../../config/routes.config';
 import { AuthService } from '../../auth/services/auth.service';
-import { catchError, EMPTY, Observable } from 'rxjs';
+import { catchError, EMPTY, Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-details-cv',
@@ -26,15 +26,19 @@ export class DetailsCvComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    const id = this.activatedRoute.snapshot.params['id'];
-
-    this.cv$ = this.cvService.getCvById(+id).pipe(
-      catchError(
-        (e) => {
-          this.router.navigate([APP_ROUTES.cv]);
-          return EMPTY;
-        }
-      )
+    this.cv$ = this.activatedRoute.params.pipe(
+      switchMap((params) => {
+        const id = params['id'];
+        console.log(id);
+        return this.cvService.getCvById(id).pipe(
+          catchError((e) => {
+            console.error(e);
+            this.toastr.error(`CV with ID ${id} not found.`);
+            this.router.navigate([APP_ROUTES.cv]);
+            return EMPTY;
+          })
+        );
+      })
     );
   }
   
