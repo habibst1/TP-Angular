@@ -14,10 +14,20 @@ import { DetailsCvComponent } from "./cv/details-cv/details-cv.component";
 import { RhComponent } from "./optimizationPattern/rh/rh.component";
 import { TtcComponent } from "./ttc/ttc.component";
 
+
+
+
 const routes: Route[] = [
-  { path: "ttc" , component: TtcComponent},
-  { path: "login", component: LoginComponent },
-  { path: "rh", component: RhComponent },
+
+  { path: "ttc" , loadComponent: () => import('./ttc/ttc.component')
+    .then(c => c.TtcComponent)},
+
+  { path: "login", loadComponent:()=> import('./auth/login/login.component').then(c=>c.LoginComponent )},
+
+
+  { path: "rh", loadComponent:()=> import('./optimizationPattern/rh/rh.component').then(c=>c.RhComponent )  },
+
+
   {
     path: "cv",
     component: CvComponent,
@@ -37,6 +47,8 @@ const routes: Route[] = [
     component: AdminComponent,
     children: [{ path: "color", component: ColorComponent }],
   },
+
+  
   { path: "**", component: NF404Component },
 ];
 
