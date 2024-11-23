@@ -6,6 +6,7 @@ import { AddCvComponent } from './add-cv/add-cv.component';
 import { DetailsCvComponent } from './details-cv/details-cv.component';
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { CvResolver } from './services/CvResolver';
+import { MasterDetailsCvComponent } from './master-details-cv/master-details-cv.component';
 
 const routes: Routes =[
     {
@@ -15,6 +16,12 @@ const routes: Routes =[
         cvs: CvResolver, 
       },
     },
+    { path: "list",
+       component: MasterDetailsCvComponent, 
+         children : [
+         {path: ":id" , component : DetailsCvComponent}
+        ]
+       },
     { path: 'add', component: AddCvComponent, canActivate: [AuthGuard] },
     { path: ':id', component: DetailsCvComponent },
   ];

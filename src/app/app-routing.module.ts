@@ -18,12 +18,12 @@ import { CustomPreloadingStrategy } from "./custom-preloading.strategy";
 // import { CvResolver } from "./cv/services/CvResolver";
 
 const routes: Route[] = [
-  // { path: "cv/list",
-  //   component: MasterDetailsCvComponent, 
-  //   children : [
-  //     {path: ":id" , component : DetailsCvComponent}
-  //   ]
-  //   },
+  //  { path: "cv/list",
+  // /  component: MasterDetailsCvComponent, 
+  //    children : [
+  //    {path: ":id" , component : DetailsCvComponent}
+  // /  ]
+  // /  },
   // {
   //   path: "cv",
   //   resolve: {
