@@ -13,6 +13,7 @@ export class CvResolver implements Resolve<Cv[]> {
   constructor(private cvService: CvService) {}
 
   resolve(): Observable<Cv[]> {
+    console.log('Resolver executed');
     return this.cvService.getCvs().pipe(
       catchError((error) => {
         console.error('Error fetching CVs:', error);

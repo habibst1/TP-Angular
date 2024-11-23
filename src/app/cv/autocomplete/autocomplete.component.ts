@@ -15,16 +15,18 @@ export class AutocompleteComponent {
   cvService = inject(CvService);
   router = inject(Router);
 
+  // initialisation du form
+ form = this.formBuilder.group({
+    search: [''],
+  });
 
+  // recuperation de la valeur dans search
   get search(): AbstractControl {
     return this.form.get('search')!;
   }
 
  
-  form = this.formBuilder.group({
-    search: [''],
-  });
-
+ 
   filteredCvs$: Observable<any[]> = of([]);
 
   constructor() {
