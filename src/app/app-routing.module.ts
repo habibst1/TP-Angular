@@ -36,7 +36,8 @@ const routes: Route[] = [
 
 
 
-  { path: 'cv', loadChildren: () => import('./cv/cv.module').then(m => m.CvModule) }, //lazy loadina el cv module
+  { path: 'cv', loadChildren: () => { console.log("lazy loading cv module ...")
+    return import('./cv/cv.module').then(m => m.CvModule)} }, //lazy loadina el cv module
  
   { path: "login", component: LoginComponent },
   { path: "rh", component: RhComponent },
@@ -47,7 +48,8 @@ const routes: Route[] = [
     component: FrontComponent,
     children: [
       { path: 'todo',
-        loadChildren: () => import('./todo/todo.module').then((m) => m.TodoModule),
+        loadChildren: () => {console.log("preloading todo module ...")
+        return import('./todo/todo.module').then((m) => m.TodoModule)},
         data: { preload: true },  },
       { path: "word", component: MiniWordComponent },
     ],
