@@ -28,7 +28,7 @@ export class UserListComponent {
   }
   fibo(n: number): number {
     const fib = fibonnaci(n);
-    console.log({n, fib});
+    // console.log({n, fib});
 
     return fib;
   }
