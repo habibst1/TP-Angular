@@ -171,9 +171,5 @@ export class CvService {
    */
   selectCv(cv: Cv) {
     this.#selectCvSuject$.next(cv);
-
-    if (this.router.url.startsWith('/cv/list')) {
-      this.router.navigate(['/cv/list', cv.id]);
-    }
   }
 }

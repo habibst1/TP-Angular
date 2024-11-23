@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import {takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CvService } from '../services/cv.service';
 import { catchError, Observable, of } from 'rxjs';
 import { Cv } from '../model/cv';
@@ -29,6 +30,11 @@ export class MasterDetailsCvComponent {
           return of(this.cvService.getFakeCvs());
         })
     );
+    this.cvService.selectCv$
+    .pipe(takeUntilDestroyed())
+    .subscribe({
+      next: cv => this.router.navigate(['/cv/list', cv.id])
+    })
     
   }
 

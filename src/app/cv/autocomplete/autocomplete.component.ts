@@ -33,14 +33,7 @@ export class AutocompleteComponent {
     this.filteredCvs$ = this.search.valueChanges.pipe(
       debounceTime(500), 
       distinctUntilChanged(),
-      switchMap((value) => {
-        if (value) {
-          console.log(value);
-          return this.cvService.searchCvs(value);
-        } else {
-          return of([]);
-        }
-      }),
+      switchMap((value) =>  this.cvService.searchCvs(value)),
       catchError((error) => {
         console.error('Error fetching CVs:', error);
         return of([]);
