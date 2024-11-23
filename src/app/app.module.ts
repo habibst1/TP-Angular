@@ -94,7 +94,8 @@ import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-
     ProductsComponent,
   ],
   bootstrap: [AppComponent],
-  imports: [
+  imports: [ 
+    
     BrowserModule,
     FormsModule,
     BrowserAnimationsModule, // required animations module
