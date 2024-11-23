@@ -17,7 +17,7 @@ import { AddCvComponent } from './add-cv/add-cv.component';
 import { DetailsCvComponent } from './details-cv/details-cv.component';
 
 @NgModule({
-  declarations: [CvComponent, AddCvComponent, DetailsCvComponent],
+
   imports: [
     CommonModule,
     CvRoutingModule, ],
