@@ -13,13 +13,18 @@
   <input type="text" class="form-control" formControlName="age" /> Cin:
   <input type="text" class="form-control" formControlName="cin" />
   <div
-    *ngIf="
-      form.errors && form.errors['cinFirstCars'] && cin?.touched && age?.touched
-    "
-    class="alert alert-danger"
-  >
+    *ngIf="cin?.hasError('pattern')  && form.get('cin')?.touched "
+    class="alert alert-danger">
+  
     Cette Cin est invalide
   </div>
+  <div *ngIf="form?.hasError('invalidCin') && cin?.touched" class="alert alert-danger">
+    {{ form.getError('invalidCin')}}
+  </div>
+  <div *ngIf="cin?.hasError('cinTaken') && cin?.touched" class="alert alert-danger">
+    Cette Cin n'est pas unique.
+  </div>
+
   Job: <input type="text" class="form-control" formControlName="job" /> Path:
   <input type="text" class="form-control" formControlName="path" />
 

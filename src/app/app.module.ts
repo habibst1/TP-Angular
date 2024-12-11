@@ -52,6 +52,9 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { AutocompleteComponent } from "./cv/autocomplete/autocomplete.component";
 import { SliderComponent } from "./rxjs/slider/slider.component";
 import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-cv.component";
+import { StoreModule } from "@ngrx/store";
+import { addCvReducer,  } from "./cv/store/cv.reducer";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 
 @NgModule({
   declarations: [
@@ -108,6 +111,13 @@ import { MasterDetailsCvComponent } from "./cv/master-details-cv/master-details-
       // or after 30 seconds (whichever comes first).
       registrationStrategy: "registerWhenStable:30000",
     }),
+    StoreModule.forRoot({}), 
+    StoreModule.forRoot({ addCv: addCvReducer }) ,  
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retain last 25 states
+      logOnly: !isDevMode(), // Restrict extension to log-only mode
+    }),
+   
   ],
   providers: [
     AuthInterceptorProvider,

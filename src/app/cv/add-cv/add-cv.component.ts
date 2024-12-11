@@ -9,6 +9,12 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { APP_ROUTES } from "src/config/routes.config";
 import { Cv } from "../model/cv";
+import { Store } from "@ngrx/store";
+import { selectAddCv, selectCv } from "../store/cv.selectors";
+import { updateCv } from "../store/cv.actions";
+import { AddCvState } from "../store/cv.state";
+import { debounceTime, of, switchMap, take } from "rxjs";
+import { cinValidator, uniqueCinValidator } from "./validators/cin.validator";
 
 @Component({
   selector: "app-add-cv",
@@ -21,32 +27,65 @@ export class AddCvComponent {
   private toastr = inject(ToastrService);
   private formBuilder = inject(FormBuilder);
 
+
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[]);
 
-  constructor() {}
+  constructor(private store: Store<AddCvState>) {
+    
+    this.ageValidator()
+    this.store.select(selectCv).pipe(take(1)).subscribe((cv) => {
+      if (cv) {
+        this.form.patchValue(cv); // Populate the form with the CV data
+      }
+    });
+    this.form.valueChanges.subscribe((value) => {
+      this.store.dispatch(updateCv({ cv: value as Cv }));
+    });
+  }
 
   form = this.formBuilder.group(
     {
       name: ["", Validators.required],
       firstname: ["", Validators.required],
-      path: [""],
+      path: [{value: "", disabled: true}],
       job: ["", Validators.required],
       cin: [
         "",
         {
-          validators: [Validators.required, Validators.pattern("[0-9]{8}")],
+          validators: [Validators.required, Validators.pattern("[0-9]{8}"),],
+          asyncValidators: [uniqueCinValidator()],
+          updateOn: 'blur',  
         },
       ],
       age: [
         0,
         {
           validators: [Validators.required],
+          updateOn: 'blur'
         },
       ],
     },
+     {validators:cinValidator()}
   );
 
+  ageValidator()
+  {
+    this.age.valueChanges.subscribe(
+      (age)=> {
+        if (age<18) 
+          {this.path?.setValue("") ;
+            this.path?.disable() ; 
+          }
+          else 
+          this.path?.enable();
+      }
+
+    )
+  }
+
+   
+  
   addCv() {
     this.cvService.addCv(this.form.value as Cv).subscribe({
       next: (cv) => {

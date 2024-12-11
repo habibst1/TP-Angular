@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { Cv } from "../model/cv";
-import { map, Observable, shareReplay, Subject } from "rxjs";
+import { catchError, map, Observable, of, shareReplay, Subject } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { API } from "../../../config/api.config";
 import { Router } from "@angular/router";
@@ -31,6 +31,24 @@ export class CvService {
     ];
   }
 
+  checkCinUniqueness(cin: string): Observable<boolean> {
+    if (!cin) {
+      return of(true); // If CIN is empty,=> valid
+    }
+  
+    //GET request to the API to fetch the persons
+    return this.http.get<any[]>(`${API.cv}?cin=${cin}`).pipe(
+      map((persons) => {
+        // Check if any person's 'cin' matches the provided CIN
+        const isCinTaken = persons.some(person => person.cin === parseInt(cin, 10)); 
+        // true if the CIN exists, false if it is unique
+        return !isCinTaken;
+      }),
+      catchError(() => of(true)) 
+    );
+  }
+  
+  
   /**
    *
    * Retourne un liste fictive de cvs
