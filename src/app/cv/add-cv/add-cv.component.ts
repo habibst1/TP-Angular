@@ -26,59 +26,69 @@ export class AddCvComponent {
   private router = inject(Router);
   private toastr = inject(ToastrService);
   private formBuilder = inject(FormBuilder);
-
-
+  cache : string = ""
   /** Inserted by Angular inject() migration for backwards compatibility */
   constructor(...args: unknown[]);
 
   constructor(private store: Store<AddCvState>) {
-    
     this.ageValidator()
+
     this.store.select(selectCv).pipe(take(1)).subscribe((cv) => {
       if (cv) {
-        this.form.patchValue(cv); // Populate the form with the CV data
+        this.cache = cv.path
+        this.form.patchValue(cv);
+        console.log(cv)
+        console.log(this.cache)
+
       }
     });
     this.form.valueChanges.subscribe((value) => {
       this.store.dispatch(updateCv({ cv: value as Cv }));
     });
+
+
   }
 
   form = this.formBuilder.group(
     {
       name: ["", Validators.required],
       firstname: ["", Validators.required],
-      path: [{value: "", disabled: true}],
+      path: [""],
       job: ["", Validators.required],
       cin: [
         "",
         {
           validators: [Validators.required, Validators.pattern("[0-9]{8}"),],
           asyncValidators: [uniqueCinValidator()],
-          updateOn: 'blur',  
+          //updateOn: 'blur',  
         },
       ],
       age: [
         0,
         {
           validators: [Validators.required],
-          updateOn: 'blur'
+          
         },
       ],
     },
      {validators:cinValidator()}
   );
-
   ageValidator()
   {
     this.age.valueChanges.subscribe(
       (age)=> {
         if (age<18) 
-          {this.path?.setValue("") ;
+          {
+            if(this.path?.value)this.cache=this.path.value ;
+            this.path?.setValue("") ;
             this.path?.disable() ; 
           }
           else 
+          {
+          console.log("cache : ",this.cache)
           this.path?.enable();
+          this.path?.setValue(this.cache)
+          }
       }
 
     )

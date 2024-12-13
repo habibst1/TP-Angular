@@ -38,14 +38,14 @@ export function cinValidator(): ValidatorFn {
 export function uniqueCinValidator() {
     const cvService = inject(CvService);
     
-    return (control: AbstractControl) => {
-        const parentGroup = control?.parent as FormGroup;
+    return (cin: AbstractControl) => {
+        const parentGroup = cin?.parent as FormGroup;
         const cinValidationResult = cinValidator()(parentGroup);
-        if (!control.value || control.hasError('pattern') || cinValidationResult?.['invalidCin']) {
+        if (cin.hasError('pattern') || cinValidationResult?.['invalidCin']) {
         return of(null);  
       }
   
-      return cvService.checkCinUniqueness(control.value).pipe(
+      return cvService.checkCinUniqueness(cin.value).pipe(
         debounceTime(500),  
         switchMap((isUnique) => {
           
